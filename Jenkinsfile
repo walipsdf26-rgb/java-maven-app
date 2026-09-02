@@ -12,8 +12,7 @@ pipeline {
  stage('Build') {
  steps { script { gv.buildApp() } }
  }
- }
- stage('Deploy') {
+  stage('Deploy') {
  input {
  message 'Select the environment to deploy to'
  ok 'Done'
@@ -29,4 +28,6 @@ pipeline {
  echo "Deploying to ${ENV}"
  }
 }
+ }
+
 }
