@@ -26,7 +26,7 @@ pipeline {
           passwordVariable: 'PWD'
           )
       ]) {
-       echo ' $USER $PWD'
+       echo " ${USER} ${PWD} "
        echo 'deploying the application...'
  }
     }
