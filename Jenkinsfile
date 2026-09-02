@@ -16,8 +16,18 @@ pipeline {
      steps { echo 'testing the application...' }
     }
    stage('Deploy') {
-    steps { echo 'deploying the application...' }
-   }
+    steps {
+      withCredentials([
+      usernamePassword(
+          credentialsId: 'server-credentials',
+          usernameVariable: 'USER',
+          passwordVariable: 'PWD'
+          )
+      ]) {
+ echo ' $USER $PWD'
+       echo 'deploying the application...'
+ }
+    }
   }
  post {
  always { echo 'This always runs' }
