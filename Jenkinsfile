@@ -3,6 +3,21 @@ pipeline {
   tools {
  maven 'maven-3.9'
  }
+parameters {
+ string(
+ name: 'VERSION',
+ defaultValue: '',
+ description: 'version to deploy'
+ )
+ choice(
+ name: 'ENVIRONMENT',
+ choices: ['dev', 'staging', 'prod']
+ )
+ booleanParam(
+ name: 'executeTests',
+ defaultValue: true
+ )
+}
 
  environment {
  NEW_VERSION = '1.3.0'
@@ -14,7 +29,7 @@ pipeline {
    stage('Test') {
      when {
        expression {
-      env.BRANCH_NAME == 'dev'
+      params.executeTests
      }
     }
      steps { echo 'testing the application...' }
@@ -32,6 +47,8 @@ pipeline {
       ]) {
        echo " ${USER} ${PWD} "
        echo 'deploying the application...'
+       echo "Deploying version ${params.VERSION}"
+       echo "Target: ${params.ENVIRONMENT}"
  }
     }
   }
