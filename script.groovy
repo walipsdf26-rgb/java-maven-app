@@ -1,10 +1,23 @@
-def buildApp() {
- echo 'building the application...'
+def buildJar() {
+  sh 'mvn package'
 }
-def testApp() {
- echo 'testing the application...'
+
+def buildImage() {
+  echo 'deploying the application...'
+  sh 'docker build -t waqassaleem/java-maven-app:1.0 .'
 }
+
 def deployApp() {
- echo "deploying version ${params.VERSION}"
+  withCredentials([
+    usernamePassword(
+      credentialsId: 'server-credentials',
+      usernameVariable: 'USER',
+      passwordVariable: 'PASS'
+    )
+  ]) {
+    sh 'echo $PASS | docker login -u $USER --password-stdin'
+    sh 'docker push waqassaleem/java-maven-app:1.0'
+  }
 }
+
 return this
